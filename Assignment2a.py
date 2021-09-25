@@ -12,8 +12,8 @@ y = np.sin(x)+x/6 + np.random.randn(n)/10
 X_train, X_test, y_train, y_test = train_test_split(x, y, random_state=0)
 
 #Reshape data to 2d array (single column 11 rows)
-X_test=X_test.reshape(-1,1)
-X_train = X_train.reshape(-1,1)
+# X_test=X_test.reshape(-1,1)
+# X_train = X_train.reshape(-1,1)
 
 # You can use this function to help you visualize the dataset by
 # plotting a scatterplot of the data points
@@ -189,6 +189,83 @@ print(answer_three(answer_two))
 #
 # This function should return one tuple (LinearRegression_R2_test_score, Lasso_R2_test_score)
 
+def answer_four():
+    from sklearn.preprocessing import PolynomialFeatures
+    from sklearn.linear_model import Lasso, LinearRegression
+
+    global X_train, X_test, y_train, y_test
+
+    poly = PolynomialFeatures(degree=12)
+    X_poly = poly.fit_transform(X_train.reshape(-1,1))
+    linreg = LinearRegression().fit(X_poly, y_train)
+    lasso_reg = Lasso(alpha=0.01, max_iter=10000).fit(X_poly,y_train)
+
+    X_test_poly = poly.transform(X_test.reshape(-1,1))
+    LinearRegression_R2_test_score = linreg.score(X_test_poly,y_test)
+    Lasso_R2_test_score = lasso_reg.score(X_test_poly,y_test)
+
+    return LinearRegression_R2_test_score, Lasso_R2_test_score
+
+
+print(answer_four())
+
+
+# Part 2 - Classification
+# Here's an application of machine learning that could save your life!
+# For this section of the assignment we will be working with the
+# UCI Mushroom Data Set stored in readonly/mushrooms.csv.
+# The data will be used to train a model to predict whether or not a mushroom is poisonous.
+# The following attributes are provided:
+#
+# Attribute Information:
+#
+# cap-shape: bell=b, conical=c, convex=x, flat=f, knobbed=k, sunken=s
+# cap-surface: fibrous=f, grooves=g, scaly=y, smooth=s
+# cap-color: brown=n, buff=b, cinnamon=c, gray=g, green=r, pink=p, purple=u, red=e, white=w, yellow=y
+# bruises?: bruises=t, no=f
+# odor: almond=a, anise=l, creosote=c, fishy=y, foul=f, musty=m, none=n, pungent=p, spicy=s
+# gill-attachment: attached=a, descending=d, free=f, notched=n
+# gill-spacing: close=c, crowded=w, distant=d
+# gill-size: broad=b, narrow=n
+# gill-color: black=k, brown=n, buff=b, chocolate=h, gray=g, green=r, orange=o, pink=p, purple=u, red=e, white=w, yellow=y
+# stalk-shape: enlarging=e, tapering=t
+# stalk-root: bulbous=b, club=c, cup=u, equal=e, rhizomorphs=z, rooted=r, missing=?
+# stalk-surface-above-ring: fibrous=f, scaly=y, silky=k, smooth=s
+# stalk-surface-below-ring: fibrous=f, scaly=y, silky=k, smooth=s
+# stalk-color-above-ring: brown=n, buff=b, cinnamon=c, gray=g, orange=o, pink=p, red=e, white=w, yellow=y
+# stalk-color-below-ring: brown=n, buff=b, cinnamon=c, gray=g, orange=o, pink=p, red=e, white=w, yellow=y
+# veil-type: partial=p, universal=u
+# veil-color: brown=n, orange=o, white=w, yellow=y
+# ring-number: none=n, one=o, two=t
+# ring-type: cobwebby=c, evanescent=e, flaring=f, large=l, none=n, pendant=p, sheathing=s, zone=z
+# spore-print-color: black=k, brown=n, buff=b, chocolate=h, green=r, orange=o, purple=u, white=w, yellow=y
+# population: abundant=a, clustered=c, numerous=n, scattered=s, several=v, solitary=y
+# habitat: grasses=g, leaves=l, meadows=m, paths=p, urban=u, waste=w, woods=d
+#
+#
+# The data in the mushrooms dataset is currently encoded with strings.
+# These values will need to be encoded to numeric to work with sklearn.
+# We'll use pd.get_dummies to convert the categorical variables into indicator variables.
+
+
+mush_df = pd.read_csv('/Users/georgeanton/Desktop/Applied_Data_Science_Python_UM/Applied_Machine_Learning/course3_downloads/mushrooms.csv')
+mush_df2 = pd.get_dummies(mush_df)
+
+X_mush = mush_df2.iloc[:,2:]
+y_mush = mush_df2.iloc[:,1]
+
+# use the variables X_train2, y_train2 for Question 5
+X_train2, X_test2, y_train2, y_test2 = train_test_split(X_mush, y_mush, random_state=0)
+
+# For performance reasons in Questions 6 and 7, we will create a smaller version of the
+# entire mushroom dataset for use in those questions.  For simplicity we'll just re-use
+# the 25% test split created above as the representative subset.
+#
+# Use the variables X_subset, y_subset for Questions 6 and 7.
+X_subset = X_test2
+y_subset = y_test2
+
+print(mush_df)
 
 
 
